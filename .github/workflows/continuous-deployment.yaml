@@ -28,8 +28,8 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_HOST_USER }}
           key: ${{ secrets.AWS_HOST_KEY }}
-          source: ./docker-compose.yaml
-          target: ./docker-compose.yaml
+          source: docker-compose.yaml
+          target: /home/${{ secrets.AWS_HOST_USER }}/docker-compose.yaml
 
       - name: Deploy on AWS
         uses: appleboy/ssh-action@v0.1.10
@@ -38,7 +38,8 @@ jobs:
           username: ${{ secrets.AWS_HOST_USER }}
           key: ${{ secrets.AWS_HOST_KEY }}
           script: | 
-            export APP_IMAGE_NAME=ghcr.io/${{ github.repository }} 
+            cd /home/${{ secrets.AWS_HOST_USER }}
+            export APP_IMAGE_NAME=ghcr.io/${{ github.repository }}/${{ env.RELEASE_VERSION }}
             echo ${APP_IMAGE_NAME}
             sudo docker compose down
             sudo docker compose up -d
