@@ -10,10 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-
       - name: Wait for continuous-delivery to succeed
         uses: lewagon/wait-on-check-action@v1.3.1
         with:
@@ -21,7 +19,6 @@ jobs:
           check-name: 'continuous-delivery'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
-
       - name: Copy docker-compose.yaml file via ssh password
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -30,7 +27,6 @@ jobs:
           key: ${{ secrets.AWS_HOST_KEY }}
           source: docker-compose.yaml
           target: /home/${{ secrets.AWS_HOST_USER }}
-
       - name: Deploy on AWS
         uses: appleboy/ssh-action@v0.1.10
         with:
