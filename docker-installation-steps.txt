@@ -1,0 +1,34 @@
+## Pasos de instalación de Docker en Ubuntu (compatibles con múltiples versiones: 20.04, 22.04...) 
+
+# Eliminamos posibles versiones antiguas de Docker
+sudo apt-get remove docker docker-engine docker.io containerd runc
+
+# Actualizamos nuestros repositorios locales
+sudo apt-get update
+
+# Instalamos una serie de dependencias para la gestión de certificados
+sudo apt-get install ca-certificates curl gnupg
+
+# Creamos -por si no está creada- una carpeta para almacenar la llave pública del repositorio -repositorio de paquetes de ubuntu, no de imágenes Docker-
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+
+# Descargamos la llave pública del repositorio desde donde vamos a instalar Docker
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+# Cambiamos los permisos del fichero de la llave del repositorio
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# Añadimos el repositorio (cuyo dirección es https://download.docker.com/linux/ubuntu) de Docker a nuestra lista de repositorios
+echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Actualizamos nuestro índice de repositorios para que actualice la información del repositorio que hemos añadido en el paso anterior
+sudo apt-get update
+
+# Instalamos el engine de docker y una serie de 'plugins' adicionales 
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Añadimos nuestro usuario al grupo 'docker' para que podamos ejecutar los comandos docker sin tener que hacer 'sudo'
+sudo groupadd docker && sudo usermod -aG docker $USER
+
+# Reiniciamos la máquina (ya sea física o virtual) para aplicar correctamente todos los cambios
+sudo reboot

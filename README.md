@@ -16,6 +16,8 @@ Para solucionar la tarea se han desarrollado tres actions diferentes, uno para c
 - [continuous-delivery.yaml](.github/workflows/continuous-delivery.yaml)
 - [continuous-deployment.yaml](.github/workflows/continuous-deployment.yaml)
 
+> **Nota**: es necesario que la máquina virtual donde se realizará el deploy final tenga Docker instalado. Para ello, se pueden seguir las instrucciones detalladas en el fichero [docker-intallation-steps.txt](docker-installation-steps.txt)
+
 ## Continuous integration
 
 ![Continuous Integration](image/README/continuous-integration.png)
